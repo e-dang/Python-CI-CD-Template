@@ -1,0 +1,11 @@
+version: '3.9'
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: prod
+        ports:
+            - 8000:8000
+        container_name: test-container # CHANGE ME
+        command: tail -F dne # keep container alive. Remove if CMD in Dockerfile already keeps it alive

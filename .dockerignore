@@ -1,0 +1,24 @@
+# Git
+.git
+.github
+.gitignore
+
+# Caches
+**/__pycache__
+*/*.pyc
+
+# Unit test / coverage reports
+.pytest_cache
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Misc.
+README*
+.ci
