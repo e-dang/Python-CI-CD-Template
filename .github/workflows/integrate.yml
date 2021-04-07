@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-    name: Build and cache Docker images
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -58,7 +57,6 @@ jobs:
 
 
   test:
-    name: Run test suite
     runs-on: ubuntu-20.04
     needs: build
     env:
