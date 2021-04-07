@@ -42,6 +42,7 @@ jobs:
           push: false
           load: true
           target: test
+          labels: 'test-image'
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
 
@@ -73,7 +74,7 @@ jobs:
     #   run: docker-compose build
 
       - name: Run unit and integration tests in docker container
-        run: docker-compose up
+        run: docker-compose --build up
         env:
           COMPOSE_FILE: .ci/docker-compose.yml
 
