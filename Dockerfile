@@ -24,14 +24,14 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 
 COPY . .
 
-CMD echo "COMPLETE"
+CMD make test
 
 ##################
 # PROD BUILD LAYER
 ##################
-# FROM base AS prod
+FROM base AS prod
 
-# COPY . .
+COPY . .
 
 # Put custom command here. Don't forget to change "command" in docker-compose.yml
 # CMD python manage.py runserver 0.0.0.0:8000
