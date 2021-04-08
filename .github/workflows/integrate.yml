@@ -81,26 +81,32 @@ jobs:
       - name: Get docker-compose version
         run: docker-compose --version
 
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+
       - name: Run unit and integration tests in docker container
         run: docker-compose -f ./.ci/docker-compose.yml up
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
+        # env:
+        #   COMPOSE_DOCKER_CLI_BUILD: 1
+        #   DOCKER_BUILDKIT: 1
 
       - name: Print docker-compose error
         run: docker-compose -f ./.ci/docker-compose.yml logs
         if: always()
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
+        # env:
+        #   COMPOSE_DOCKER_CLI_BUILD: 1
+        #   DOCKER_BUILDKIT: 1
 
       - name: Print docker-compose config
         run: docker-compose -f ./.ci/docker-compose.yml config
         if: always()
-        env:
-          COMPOSE_DOCKER_CLI_BUILD: 1
-          DOCKER_BUILDKIT: 1
+        # env:
+        #   COMPOSE_DOCKER_CLI_BUILD: 1
+        #   DOCKER_BUILDKIT: 1
 
+      - name: Run unit and integration tests in docker container
+        run: docker-compose -f ./.ci/docker-compose.yml up
       # - name: Build and push
       #   uses: docker/build-push-action@v2
       #   with:

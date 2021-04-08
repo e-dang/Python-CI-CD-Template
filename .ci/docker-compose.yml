@@ -4,5 +4,4 @@ services:
         build:
             context: ..
             dockerfile: Dockerfile
-            target: base
-        command: echo "COMPLETE"
+            target: test
