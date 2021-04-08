@@ -31,8 +31,12 @@ jobs:
         run: docker-compose up
 
       - name: Print docker-compose config on failure
-        run: docker-compose config
-        # if: failure()
+        run: |
+        docker-compose config
+        docker-compose logs
+        cat .ci/docker-compose.yml
+
+      # if: failure()
       - name: Print Dockerfile
         run: cat Dockerfile
 
