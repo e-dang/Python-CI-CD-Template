@@ -7,6 +7,7 @@ install:
 	pip3 install -r test-requirements.txt
 
 build: # this runs it in the background and can be accessed with command "docker exec -it <CONTAINER_NAME> /bin/bash"
+	docker-compose build && \
 	docker-compose up --detach
 
 test-u:
