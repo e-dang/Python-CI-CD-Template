@@ -20,7 +20,10 @@ RUN python3 -m pip install -U pip && \
 FROM base AS test
 
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends build-essential
+    && apt-get -y install --no-install-recommends make
+
+RUN python3 -m pip install -U pip && \
+    pip3 install --no-cache-dir -r test-requirements.txt
 
 COPY . .
 
