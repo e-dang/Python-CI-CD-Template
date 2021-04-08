@@ -15,6 +15,11 @@ test-i:
 	pytest -m integration
 
 test-f:
+	echo "Testing against local test server..." && \
 	pytest $(HEADLESS) -m functional
+
+test-f-docker: build
+	echo "Testing against docker container..." && \
+	SERVER_URL=http://localhost:8000 pytest $(HEADLESS) -m functional
 
 test: test-u test-i test-f
