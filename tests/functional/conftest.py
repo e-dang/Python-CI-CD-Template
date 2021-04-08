@@ -21,6 +21,14 @@ def driver(request):
     driver.quit()
 
 
+@pytest.fixture
+def server_url(live_server):
+    url = os.environ.get('SERVER_URL')
+    if url:
+        return url
+    return live_server.url
+
+
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):  # set up a hook to be able to check if a test has failed
     # execute all other hooks to obtain the report object
