@@ -32,7 +32,7 @@ jobs:
 
       - name: Print docker-compose config on failure
         run: docker-compose config
-        if: failure()
+        # if: failure()
 
   push:
     runs-on: ubuntu-20.04
@@ -52,7 +52,7 @@ jobs:
 
       # TODO: update tag name
       - name: Build production image
-        run: docker build -t python-ci-cd-template:latest --target prod .
+        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/python-ci-cd-template:latest --target prod .
 
       - name: Push production image to registry
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/python-ci-cd-template:latest
