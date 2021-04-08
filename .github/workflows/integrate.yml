@@ -14,6 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     env:
       COMPOSE_FILE: .ci/docker-compose.yml
+      LOG_FILE: log.txt
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -24,24 +25,33 @@ jobs:
 
       - name: Print docker and docker-compose version
         run: |
-          docker --version
-          docker-compose --version
+          echo "DOCKER AND DOCKER-COMPOSE VERSION" >> $LOG_FILE
+          docker --version | tee -a $LOG_FILE
+          docker-compose --version | tee -a $LOG_FILE
 
       - name: Build docker target
-        run: docker-compose build test
+        run: docker-compose build test | tee -a $LOG_FILE
 
       - name: Run tests in docker container
-        run: docker-compose up
+        run: docker-compose up | tee -a $LOG_FILE
 
       - name: Print docker-compose config on failure
+        if: failure()
         run: |
-          docker-compose config
-          docker-compose logs
-          cat .ci/docker-compose.yml
+          echo "DOCKER-COMPOSE CONFIG" >> $LOG_FILE
+          docker-compose config | tee -a $LOG_FILE
 
-      # if: failure()
-      - name: Print Dockerfile
-        run: cat Dockerfile
+      - name: Fail
+        run: false
+
+      - uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: Upload log file and screenshots on failure
+          path: |
+            ./${{ env.LOG_FILE }}
+            ./tests/functional/screenshots
+          if-no-files-found: ignore
 
   push:
     runs-on: ubuntu-20.04
