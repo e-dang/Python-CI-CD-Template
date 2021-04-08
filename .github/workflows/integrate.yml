@@ -88,14 +88,18 @@ jobs:
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
 
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          builder: ${{ steps.buildx.outputs.name }}
-          context: .
-          file: ./Dockerfile
-          push: true
-          target: prod
-          tags: ericdang/python-ci-cd-template:latest
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+      - name: Print docker-compose error
+        run: docker-compose logs
+        if: succeeded() || failed()
+
+      # - name: Build and push
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     builder: ${{ steps.buildx.outputs.name }}
+      #     context: .
+      #     file: ./Dockerfile
+      #     push: true
+      #     target: prod
+      #     tags: ericdang/python-ci-cd-template:latest
+      #     cache-from: type=local,src=/tmp/.buildx-cache
+      #     cache-to: type=local,dest=/tmp/.buildx-cache
