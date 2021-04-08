@@ -82,11 +82,11 @@ jobs:
         run: docker-compose --version
 
       - name: Run unit and integration tests in docker container
-        run: docker-compose up
+        run: docker-compose -f ./.ci/docker-compose.yml up
         env:
-          COMPOSE_FILE: .ci/docker-compose.yml
           COMPOSE_DOCKER_CLI_BUILD: 1
           DOCKER_BUILDKIT: 1
+          # COMPOSE_FILE: .ci/docker-compose.yml
 
       - name: Print docker-compose error
         run: docker-compose logs
