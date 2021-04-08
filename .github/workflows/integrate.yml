@@ -16,7 +16,7 @@ on:
       - 'LICENSE'
 
 jobs:
-  test:
+  test-commit:
     runs-on: ubuntu-20.04
     env:
       COMPOSE_FILE: .ci/docker-compose.yml
@@ -38,8 +38,64 @@ jobs:
       - name: Build docker target
         run: docker-compose build test | tee -a $LOG_FILE
 
-      - name: Run tests in docker container
+      - name: Run unit and integration tests in docker container
         run: docker-compose up | tee -a $LOG_FILE
+
+      - name: Print docker-compose config on failure
+        if: failure()
+        run: |
+          echo "DOCKER-COMPOSE CONFIG" >> $LOG_FILE
+          docker-compose config | tee -a $LOG_FILE
+
+      - name: Upload log file on failure
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: Commit Logs
+          path: |
+            ./${{ env.LOG_FILE }}
+          if-no-files-found: ignore
+
+  test-acceptance:
+    runs-on: ubuntu-20.04
+    needs: test-commit
+    env:
+      COMPOSE_FILE: ./docker-compose.yml
+      LOG_FILE: log.txt
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Setup cache for docker images
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+
+      - name: Print docker and docker-compose version
+        run: |
+          echo "DOCKER AND DOCKER-COMPOSE VERSION" >> $LOG_FILE
+          docker --version | tee -a $LOG_FILE
+          docker-compose --version | tee -a $LOG_FILE
+
+      - name: Install firefox
+        run: sudo apt install firefox
+
+      - name: Install geckodriver
+        run: |
+          wget https://github.com/mozilla/geckodriver/releases/download/v0.28.0/geckodriver-v0.28.0-linux64.tar.gz
+          tar -xvzf geckodriver*
+          sudo mv geckodriver /usr/local/bin
+          echo "GECKO DRIVER VERSION" >> $LOG_FILE
+          geckodriver --version | tee -a $LOG_FILE
+
+      - name: Install dependencies
+        run: make install
+
+      - name: Run functional tests against server in docker container
+        run: make test-f-docker
 
       - name: Print docker-compose config on failure
         if: failure()
@@ -51,7 +107,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: Logs
+          name: Acceptance Logs
           path: |
             ./${{ env.LOG_FILE }}
             ./tests/functional/screenshots
@@ -59,7 +115,7 @@ jobs:
 
   push:
     runs-on: ubuntu-20.04
-    needs: test
+    needs: test-acceptance
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

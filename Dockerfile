@@ -29,7 +29,7 @@ RUN python3 -m pip install -U pip && \
 
 COPY . .
 
-CMD make test
+CMD sh -c "make test-u && make test-i"
 
 ##################
 # PROD BUILD LAYER
