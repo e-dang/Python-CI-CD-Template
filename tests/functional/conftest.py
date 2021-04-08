@@ -5,6 +5,22 @@ import pytest
 from selenium import webdriver
 
 
+@pytest.fixture(scope='session', params=[(webdriver.Firefox, webdriver.FirefoxOptions)])
+def driver(request):
+    kwargs = {}
+    driver_cls, options_cls = request.param
+    if request.config.getoption('--headless'):
+        opts = options_cls()
+        opts.add_argument('--headless')
+        kwargs['options'] = opts
+
+    driver = driver_cls(**kwargs)
+
+    yield driver
+
+    driver.quit()
+
+
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):  # set up a hook to be able to check if a test has failed
     # execute all other hooks to obtain the report object
@@ -25,7 +41,7 @@ def test_failed_check(request):  # check if a test has failed
         print("setting up a test failed!", request.node.nodeid)
     elif request.node.rep_setup.passed:
         if request.node.rep_call.failed:
-            driver = request.node.instance.driver
+            driver = request.node.funcargs['driver']
             take_screenshot(driver, request.node.nodeid)
 
 
@@ -35,19 +51,3 @@ def take_screenshot(driver, nodeid):  # make a screenshot with a name of the tes
     if not os.path.exists(screenshot_dir):
         os.mkdir(screenshot_dir)
     driver.save_screenshot(os.path.join(screenshot_dir, file_name))
-
-
-@pytest.fixture(params=[(webdriver.Firefox, webdriver.FirefoxOptions)])
-def driver(request):
-    kwargs = {}
-    driver_cls, options_cls = request.param
-    if request.config.getoption('--headless'):
-        opts = options_cls()
-        opts.add_argument('--headless')
-        kwargs['options'] = opts
-
-    driver = driver_cls(**kwargs)
-
-    yield driver
-
-    driver.quit()
