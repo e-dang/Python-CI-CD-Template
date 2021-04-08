@@ -73,14 +73,13 @@ jobs:
       #     cache-from: type=local,src=/tmp/.buildx-cache
       #     cache-to: type=local,dest=/tmp/.buildx-cache
 
-      - name: Print buildx cache dir
-        run: ls -la /tmp/.buildx-cache
-
-      - name: Print docker images ls
-        run: docker image ls
-
     # - name: Build docker images
     #   run: docker-compose build
+      - name: Get docker version
+        run: docker --version
+
+      - name: Get docker-compose version
+        run: docker-compose --version
 
       - name: Run unit and integration tests in docker container
         run: docker-compose up
