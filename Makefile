@@ -3,7 +3,8 @@ HEADLESS := $(if $(CI), --headless, )
 
 install:
 	python3 -m pip install -U pip && \
-	pip3 install -r requirements.txt
+	pip3 install -r requirements.txt && \
+	pip3 install -r test-requirements.txt
 
 build: # this runs it in the background and can be accessed with command "docker exec -it <CONTAINER_NAME> /bin/bash"
 	docker-compose up --detach
