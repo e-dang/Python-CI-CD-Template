@@ -22,6 +22,8 @@ FROM base AS test
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends make
 
+COPY test-requirements.txt ./
+
 RUN python3 -m pip install -U pip && \
     pip3 install --no-cache-dir -r test-requirements.txt
 
