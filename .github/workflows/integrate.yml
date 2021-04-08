@@ -21,7 +21,7 @@ jobs:
       - name: Print docker and docker-compose version
         run: |
           docker --version
-          docker-compoes --version
+          docker-compose --version
 
       - name: Setup cache for docker images
         uses: satackey/action-docker-layer-caching@v0.0.11
