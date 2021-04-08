@@ -41,13 +41,11 @@ jobs:
           echo "DOCKER-COMPOSE CONFIG" >> $LOG_FILE
           docker-compose config | tee -a $LOG_FILE
 
-      - name: Fail
-        run: false
-
-      - uses: actions/upload-artifact@v2
+      - name: Upload log file and screenshots on failure
+        uses: actions/upload-artifact@v2
         if: failure()
         with:
-          name: Upload log file and screenshots on failure
+          name: Logs
           path: |
             ./${{ env.LOG_FILE }}
             ./tests/functional/screenshots
