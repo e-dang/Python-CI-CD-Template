@@ -90,7 +90,7 @@ jobs:
 
       - name: Print docker-compose error
         run: docker-compose logs
-        if: succeeded() || failed()
+        if: always()
 
       # - name: Build and push
       #   uses: docker/build-push-action@v2
