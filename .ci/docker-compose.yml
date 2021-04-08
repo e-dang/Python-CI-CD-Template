@@ -5,3 +5,4 @@ services:
             context: ..
             dockerfile: Dockerfile
             target: test
+            command: ['make', 'test']
