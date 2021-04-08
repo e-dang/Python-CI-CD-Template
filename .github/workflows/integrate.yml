@@ -55,8 +55,8 @@ jobs:
       #       rm -rf /tmp/.buildx-cache
       #       mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-      - name: Print buildx cache dir
-        run: ls -la /tmp/.buildx-cache
+      # - name: Print buildx cache dir
+      #   run: ls -la /tmp/.buildx-cache
 
       - name: Print docker images ls
         run: docker image ls
