@@ -92,7 +92,7 @@ jobs:
         run: docker-compose logs
         if: always()
 
-        - name: Print docker-compose config
+      - name: Print docker-compose config
         run: docker-compose config
         if: always()
 
