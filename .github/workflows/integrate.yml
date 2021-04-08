@@ -5,9 +5,15 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '**/README.md'
+      - 'LICENSE'
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - '**/README.md'
+      - 'LICENSE'
 
 jobs:
   test:
