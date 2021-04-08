@@ -38,5 +38,5 @@ FROM base AS prod
 
 COPY . .
 
-# TODO: Edit command
-CMD tail -F dne
+# TODO: Dont use this in production
+CMD python manage.py runserver 0.0.0.0:8000
