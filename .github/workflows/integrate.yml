@@ -32,9 +32,9 @@ jobs:
 
       - name: Print docker-compose config on failure
         run: |
-        docker-compose config
-        docker-compose logs
-        cat .ci/docker-compose.yml
+          docker-compose config
+          docker-compose logs
+          cat .ci/docker-compose.yml
 
       # if: failure()
       - name: Print Dockerfile
